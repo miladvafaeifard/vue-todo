@@ -1,7 +1,7 @@
 <template>
   <div class="todo">
-      <input type="text" v-model="field" placeholder="What your mind is saying ...">
-      <button @click="Add()">Add</button>
+      <input type="text" v-model="inputValue" placeholder="What your mind is saying ...">
+      <button @click="executeAdd()">Add</button>
       <ul>
         <li v-for="(todo, key, index) in this.$props.todos" :key="index">{{todo.title}}</li>
       </ul>
@@ -9,7 +9,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+import { State, Action } from 'vuex-class';
 import ITodo from '@/model/todo.interface';
 
 @Component({
@@ -18,10 +19,13 @@ import ITodo from '@/model/todo.interface';
   }
 })
 export default class TodoList extends Vue {
-  private field = '';
-  Add() {
-    this.$store.state.field = this.field;
-    this.$store.dispatch('Add');
+  private inputValue = '';
+  @Action('Add') Add!: ({ value }: { value: string }) => void; // map this.Add() to this.$store.dispatch('Add');
+  @State('todos') Todos!: Array<ITodo>;
+
+  executeAdd() {
+    this.Add({ value: this.inputValue });
+    console.log('state: ', this.Todos);
   }
 }
 </script>

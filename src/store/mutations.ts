@@ -1,11 +1,12 @@
 import ITodoState from '@/store/interfaces/ITodoState';
 
 const mutations = {
-  Add(state: ITodoState) {
-    if (state.field) {
+  Add(state: ITodoState, data: { value: '' }) {
+    console.log('data: ', data);
+    if (data.value) {
       state.todos.push({
         id: state.uuid++,
-        title: state.field
+        title: data.value
       });
     }
   }

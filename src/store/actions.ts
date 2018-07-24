@@ -1,10 +1,11 @@
 export type Action = 'Add' | 'Delete';
-type CommitAnnotation = (action: Action) => void;
+export type Data = { value: string };
+type CommitAnnotation = (action: Action, data: Data) => void;
 type Commit = { commit: CommitAnnotation };
 
 const actions = {
-  Add({ commit }: Commit) {
-    commit('Add');
+  Add({ commit }: Commit, data: Data) {
+    commit('Add', data);
   }
 };
 
