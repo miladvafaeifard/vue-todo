@@ -1,5 +1,5 @@
 <template>
-  <div class="todo"> 
+  <div class="todo">
       <input type="text" v-model="field" placeholder="What your mind is saying ...">
       <button @click="Add()">Add</button>
       <ul>
@@ -10,11 +10,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Todo from '@/interfaces/todo.interface';
+import ITodo from '@/model/todo.interface';
 
 @Component({
   props: {
-    todos: Array as () => Array<Todo>
+    todos: Array as () => Array<ITodo>
   }
 })
 export default class TodoList extends Vue {
