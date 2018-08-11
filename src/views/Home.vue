@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Vue Todo"/>
     <TodoList :todos="todos"></TodoList>
   </div>
 </template>
@@ -9,13 +8,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 
-import HelloWorld from '@/components/HelloWorld.vue';
 import TodoList from '@/components/TodoList.vue';
 import ITodo from '../model/todo.interface';
 
 @Component({
   components: {
-    HelloWorld,
     TodoList
   }
 })

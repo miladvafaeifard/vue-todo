@@ -10,7 +10,8 @@ const state: ITodoState = {
   todos: [
     {
       id: 0,
-      title: 'Hello my girl'
+      title: 'Hello my girl',
+      completed: true
     }
   ]
 };

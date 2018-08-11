@@ -1,9 +1,30 @@
 <template>
-  <div class="todo">
-      <input type="text" v-model="inputValue" placeholder="What your mind is saying ...">
-      <button @click="executeAdd()">Add</button>
-      <ul>
-        <li v-for="(todo, key, index) in this.$props.todos" :key="index">{{todo.title}}</li>
+  <div class="todo container">
+    <div>
+      <h1>Vue Todo</h1>
+      <div class="input-group mb-3">
+        <input type="text" 
+               class="form-control"
+               v-model="inputValue" 
+               placeholder="What your mind is saying ...">
+        <div class="input-group-append">
+          <button type="button" 
+                  class="btn btn-primary" 
+                  @click="executeAdd()">Add</button>
+        </div>
+      </div>
+    </div>
+      <ul class="list-group">
+        <li class="list-group-item" 
+            v-for="(todo, key, index) in this.$props.todos" :key="index"
+            >
+            <label>
+                <input type="checkbox" :checked="todo.completed">{{todo.title}}
+            </label>
+            <button class="close">
+              <span>X</span>
+            </button>
+        </li>
       </ul>
   </div>
 </template>
@@ -32,9 +53,15 @@ export default class TodoList extends Vue {
 
 <style scoped lang="scss">
 .todo {
-  li {
-    font-size: 2rem;
-    color: #079abd;
+  .list-group-item {
+    label {
+      input {
+        margin-right: 0.5rem;
+      }
+    }
+    .close {
+      margin-top: 0.13rem;
+    }
   }
 }
 </style>

@@ -6,7 +6,8 @@ const mutations = {
     if (data.value) {
       state.todos.push({
         id: state.uuid++,
-        title: data.value
+        title: data.value,
+        completed: false
       });
     }
   }
