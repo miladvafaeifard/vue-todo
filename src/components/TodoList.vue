@@ -18,11 +18,14 @@
         <li class="list-group-item" 
             v-for="(todo, key, index) in this.$props.todos" :key="index"
             >
-            <label>
-                <input type="checkbox" :checked="todo.completed">{{todo.title}}
-            </label>
-            <button class="close">
-              <span>X</span>
+            <input type="checkbox" 
+                   :checked="todo.completed"
+                   />
+            <label>{{todo.title}}</label>
+            <button class="close" 
+                    @click="executeDelete(todo.id)"
+                    >
+                      <span>X</span>
             </button>
         </li>
       </ul>
@@ -42,11 +45,17 @@ import ITodo from '@/model/todo.interface';
 export default class TodoList extends Vue {
   private inputValue = '';
   @Action('Add') Add!: ({ value }: { value: string }) => void; // map this.Add() to this.$store.dispatch('Add');
+  @Action('Delete') Delete!: ({ id }: { id: number }) => void; // map this.Add() to this.$store.dispatch('Add');
   @State('todos') Todos!: Array<ITodo>;
 
   executeAdd() {
     this.Add({ value: this.inputValue });
     console.log('state: ', this.Todos);
+  }
+
+  executeDelete(id: number) {
+    console.log('id: ', id);
+    this.Delete({ id });
   }
 }
 </script>
@@ -54,14 +63,15 @@ export default class TodoList extends Vue {
 <style scoped lang="scss">
 .todo {
   .list-group-item {
-    label {
-      input {
-        margin-right: 0.5rem;
-      }
+    input {
+      margin-right: 0.5rem;
     }
-    .close {
-      margin-top: 0.13rem;
+    input:checked + label {
+      text-decoration: line-through;
     }
+  }
+  .close {
+    margin-top: 0.13rem;
   }
 }
 </style>
