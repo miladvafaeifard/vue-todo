@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 import BootstrapVue from 'bootstrap-vue';
 
 import App from './App.vue';
-import router from './router';
+import router from '@/router';
 import './registerServiceWorker';
-import createStore from './store';
+import createStore from '@/store';
 
 Vue.config.productionTip = false;
 
