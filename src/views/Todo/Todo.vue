@@ -17,7 +17,8 @@
       <TodoItem v-for="(todo, key, index) in this.todos"
                 :key="index" 
                 :todo="todo" 
-                :deleteHandle="executeDelete"/>
+                :deleteHandle="executeDelete"
+                :updateHandle="executeUpdate"/>
   </div>
 </template>
 
@@ -37,14 +38,22 @@ export default class Todo extends Vue {
   private inputValue = '';
   @Action('Add') Add!: ({ value }: { value: string }) => void; // map this.Add() to this.$store.dispatch('Add');
   @Action('Delete') Delete!: ({ id }: { id: number }) => void; // map this.Add() to this.$store.dispatch('Add');
+  @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
   @State('todos') todos!: Array<ITodo>;
 
   executeAdd() {
-    this.Add({ value: this.inputValue });
+    if (this.inputValue) {
+      this.Add({ value: this.inputValue });
+      this.inputValue = '';
+    }
   }
 
   executeDelete(id: number) {
     this.Delete({ id });
+  }
+
+  executeUpdate(todo: ITodo) {
+    this.Update({ todo });
   }
 }
 </script>
