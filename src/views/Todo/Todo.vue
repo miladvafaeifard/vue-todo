@@ -15,9 +15,9 @@
           </div>
         </div>
       </div>
-      <TodoItem v-for="(todo, key, index) in this.todos"
-                :key="index" 
-                :todo="todo" 
+      <TodoItem v-for="(todo) in this.todos"
+                :key="todo.id"
+                :todo="todo"
                 :deleteHandle="executeDelete"
                 :updateHandle="executeUpdate"/>
   </div>
