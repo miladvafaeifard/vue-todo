@@ -20,6 +20,9 @@ const mutations = {
     });
 
     state.todos.splice(index, 1, data.todo);
+  },
+  SetTodos(state: ITodoState, data: { todos: ITodo[] }) {
+    state.todos = data.todos;
   }
 };
 
