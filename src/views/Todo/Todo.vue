@@ -15,9 +15,9 @@
           </div>
         </div>
       </div>
-      <TodoItem v-for="(todo, key, index) in this.todos"
-                :key="index" 
-                :todo="todo" 
+      <TodoItem v-for="(todo) in this.todos"
+                :key="todo.id"
+                :todo="todo"
                 :deleteHandle="executeDelete"
                 :updateHandle="executeUpdate"/>
   </div>
@@ -30,6 +30,7 @@ import { State, Action } from 'vuex-class';
 import ITodo from '@/model/todo.interface';
 // @ts-ignore
 import TodoItem from '@/components/TodoItem';
+import { HttpService } from '@/core/services/http-service';
 
 @Component({
   components: {
@@ -42,6 +43,10 @@ export default class Todo extends Vue {
   @Action('Delete') Delete!: ({ id }: { id: number }) => void; // map this.Add() to this.$store.dispatch('Add');
   @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
   @State('todos') todos!: Array<ITodo>;
+
+  mounted() {
+    this.$store.dispatch('LoadTodos');
+  }
 
   executeAdd() {
     if (this.inputValue) {
@@ -68,7 +73,7 @@ input {
     box-shadow: -3px 0px 5px 0.1rem rgba(66, 185, 131, 0.555);
   }
 }
-button{
+button {
   color: white;
   background-color: $c-vue-green;
   border-color: $c-vue-green;
