@@ -1,14 +1,18 @@
+import uniqid from 'uniqid';
 import ITodoState from '@/store/interfaces/ITodoState';
 import ITodo from '@/model/todo.interface';
 
 const mutations = {
-  Add(state: ITodoState, data: { value: string } = { value: '' }) {
-    if (data.value) {
+  Add(state: ITodoState) {
+    if (state.field) {
       state.todos.push({
-        id: ++state.uuid,
-        title: data.value,
+        id: uniqid(),
+        title: state.field,
         completed: false
       });
+
+      state.filteredTodos = null;
+      state.field = '';
     }
   },
   Delete(state: ITodoState, data: { id: number } = { id: -1 }) {
@@ -20,6 +24,17 @@ const mutations = {
     });
 
     state.todos.splice(index, 1, data.todo);
+  },
+  Filter(state: ITodoState) {
+    if (!state.field) {
+      state.filteredTodos = null;
+    } else {
+      state.filteredTodos = [
+        ...state.todos.filter(todo =>
+          todo.title.toLowerCase().includes(state.field.toLowerCase())
+        )
+      ];
+    }
   },
   SetTodos(state: ITodoState, data: { todos: ITodo[] }) {
     state.todos = data.todos;

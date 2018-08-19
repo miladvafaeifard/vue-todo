@@ -1,36 +1,37 @@
 <template>
-  <div class="todo container">
-      <div>
-        <h1>Vue Todo</h1>
-        <div class="input-group mb-3">
-          <input type="text"
-               class="form-control"
-               v-model="inputValue"
-               @keyup.enter="executeAdd()"
-               placeholder="What your mind is saying ...">
-          <div class="input-group-append">
-            <button type="button" 
-                  class="btn"
-                  @click="executeAdd()">Add</button>
-          </div>
+    <div class="todo container">
+        <div>
+            <h1>Vue Todo</h1>
+            <div class="input-group mb-3">
+                <input type="text"
+                       class="form-control"
+                       :value="field"
+                       @keyup.enter="executeAdd"
+                       @keyup="executeFilter"
+                       placeholder="What your mind is saying ...">
+                <div class="input-group-append">
+                    <button type="button"
+                            class="btn"
+                            @click="executeAdd(field)">Add
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <TodoItem v-for="(todo) in this.todos"
-                :key="todo.id"
-                :todo="todo"
-                :deleteHandle="executeDelete"
-                :updateHandle="executeUpdate"/>
-  </div>
+        <TodoItem v-for="(todo) in todos"
+                  :key="todo.id"
+                  :todo="todo"
+                  :deleteHandle="executeDelete"
+                  :updateHandle="executeUpdate"/>
+    </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { State, Action } from 'vuex-class';
+import { State, Action, Getter } from 'vuex-class';
 
 import ITodo from '@/model/todo.interface';
 // @ts-ignore
 import TodoItem from '@/components/TodoItem';
-import { HttpService } from '@/core/services/http-service';
 
 @Component({
   components: {
@@ -38,21 +39,36 @@ import { HttpService } from '@/core/services/http-service';
   }
 })
 export default class Todo extends Vue {
-  private inputValue = '';
-  @Action('Add') Add!: ({ value }: { value: string }) => void; // map this.Add() to this.$store.dispatch('Add');
-  @Action('Delete') Delete!: ({ id }: { id: number }) => void; // map this.Add() to this.$store.dispatch('Add');
+  private timer: number = 0;
+
+  @Action('Add') Add!: () => void;
+  @Action('Filter') Filter!: () => void;
+  @Action('Delete') Delete!: ({ id }: { id: number }) => void;
   @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
-  @State('todos') todos!: Array<ITodo>;
+
+  @Getter('filteredTodos') filteredTodos!: Array<ITodo>;
+  @Getter('field') field!: string;
+
+  @State('todos') allTodos!: Array<ITodo>;
 
   mounted() {
     this.$store.dispatch('LoadTodos');
   }
 
-  executeAdd() {
-    if (this.inputValue) {
-      this.Add({ value: this.inputValue });
-      this.inputValue = '';
+  executeFilter(e) {
+    this.$store.state.field = e.target.value;
+    clearTimeout(this.timer);
+    if (this.field.length > 3) {
+      this.timer = window.setTimeout(() => {
+        this.Filter();
+      }, 500);
+    } else if (this.field.length === 0) {
+      this.Filter();
     }
+  }
+
+  executeAdd() {
+    this.Add();
   }
 
   executeDelete(id: number) {
@@ -61,6 +77,10 @@ export default class Todo extends Vue {
 
   executeUpdate(todo: ITodo) {
     this.Update({ todo });
+  }
+
+  get todos() {
+    return this.filteredTodos ? this.filteredTodos : this.allTodos;
   }
 }
 </script>
@@ -73,6 +93,7 @@ input {
     box-shadow: -3px 0px 5px 0.1rem rgba(66, 185, 131, 0.555);
   }
 }
+
 button {
   color: white;
   background-color: $c-vue-green;

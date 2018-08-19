@@ -1,25 +1,34 @@
 import { HttpService } from '@/core/services/http-service';
 import ITodo from '@/model/todo.interface';
 
-export type Action = 'Add' | 'Delete' | 'Update' | 'LoadTodos' | 'SetTodos';
-export type Data = {
-  value?: string;
-  id?: number;
-  completed?: boolean;
-  todos?: ITodo[];
-};
-type CommitAnnotation = (action: Action, data: Data) => void;
+export type Action =
+  | 'Add'
+  | 'Delete'
+  | 'Update'
+  | 'LoadTodos'
+  | 'SetTodos'
+  | 'Filter'
+  | 'SetField';
+
+interface IdString {
+  id: number;
+}
+
+type CommitAnnotation = (action: Action, data?: any) => void;
 type Commit = { commit: CommitAnnotation };
 
 const actions = {
-  Add({ commit }: Commit, data: Data) {
-    commit('Add', data);
+  Add({ commit }: Commit) {
+    commit('Add');
   },
-  Delete({ commit }: Commit, data: Data) {
+  Delete({ commit }: Commit, data: IdString) {
     commit('Delete', data);
   },
-  Update({ commit }: Commit, data: Data) {
+  Update({ commit }: Commit, data: ITodo) {
     commit('Update', data);
+  },
+  Filter({ commit }: Commit) {
+    commit('Filter');
   },
   LoadTodos({ commit }: Commit) {
     HttpService.get('todos')
