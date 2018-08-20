@@ -55,7 +55,7 @@ export default class Todo extends Vue {
     this.$store.dispatch('LoadTodos');
   }
 
-  executeFilter(e) {
+  executeFilter(e: any) {
     this.$store.state.field = e.target.value;
     clearTimeout(this.timer);
     if (this.field.length > 3) {
