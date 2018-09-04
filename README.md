@@ -1,4 +1,4 @@
-# Project Title
+# Vue Todo
 
 The basic Todo Application using vue, which i am trying to practice and learn, will be expanded more features such as AI, cool UI/UX.
 
