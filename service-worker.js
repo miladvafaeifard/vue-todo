@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.4.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.4e12d0eecf574a0e00182d470ee074e2.js"
+  "precache-manifest.1f601f498e67bb3df34ac8476c77ba11.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vue-todo"});
