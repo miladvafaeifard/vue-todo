@@ -6,19 +6,24 @@
                 <input type="text"
                        class="form-control"
                        :value="field"
-                       @keyup.enter="executeAdd"
-                       @keyup="executeFilter"
-                       placeholder="What your mind is saying ...">
+                       @keyup.enter="(e) => executeAdd(e.target.value)"
+                       @keyup="(e) => {
+                            if (e.keyCode !== 13){
+                               executeFilter(e.target.value);
+                            }
+                       }"
+                       placeholder="write something ... or search ...">
                 <div class="input-group-append">
                     <button type="button"
                             class="btn"
-                            @click="executeAdd(field)">Add
+                            @click="executeAdd(field)">
+                        Add
                     </button>
                 </div>
             </div>
         </div>
         <TodoItem v-for="(todo) in todos"
-                  :key="todo.id"
+                  :key="todo._id"
                   :todo="todo"
                   :deleteHandle="executeDelete"
                   :updateHandle="executeUpdate"/>
@@ -43,7 +48,7 @@ export default class Todo extends Vue {
 
   @Action('Add') Add!: () => void;
   @Action('Filter') Filter!: () => void;
-  @Action('Delete') Delete!: ({ id }: { id: number }) => void;
+  @Action('Delete') Delete!: ({ _id }: { _id: string }) => void;
   @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
 
   @Getter('filteredTodos') filteredTodos!: Array<ITodo>;
@@ -55,24 +60,21 @@ export default class Todo extends Vue {
     this.$store.dispatch('LoadTodos');
   }
 
-  executeFilter(e) {
-    this.$store.state.field = e.target.value;
+  executeFilter(value: string) {
+    this.$store.state.field = value;
     clearTimeout(this.timer);
-    if (this.field.length > 3) {
-      this.timer = window.setTimeout(() => {
-        this.Filter();
-      }, 500);
-    } else if (this.field.length === 0) {
+    this.timer = window.setTimeout(() => {
       this.Filter();
-    }
+    }, 500);
   }
 
-  executeAdd() {
+  executeAdd(value: string) {
+    this.$store.state.field = value;
     this.Add();
   }
 
-  executeDelete(id: number) {
-    this.Delete({ id });
+  executeDelete(_id: string) {
+    this.Delete({ _id });
   }
 
   executeUpdate(todo: ITodo) {

@@ -7,19 +7,19 @@
 
         <label @click="enableEdit()" 
                v-if="!isEdit">
-               {{todo.title}}
+               {{todo.task}}
         </label>
 
         <input type="text" 
                class="edit-item form-control"
-               v-model="title"
-               value="todo.title"
+               v-model="task"
+               value="todo.task"
                @keyup.enter="disableEdit()"
                @blur="disableEdit()"
                v-if="isEdit"  v-focus/>
 
         <button class="close"
-                @click="deleteHandle(todo.id)"
+                @click="deleteHandle(todo._id)"
                 >
                   <span>X</span>
         </button>        
@@ -44,12 +44,12 @@ import ITodo from '@/model/todo.interface';
 })
 export default class TodoItem extends Vue {
   isEdit: boolean = false;
-  title: string = '';
+  task: string = '';
   isDone: boolean = false;
 
   mounted() {
     this.isDone = this.$props.todo.completed;
-    this.title = this.$props.todo.title;
+    this.task = this.$props.todo.task;
   }
 
   private enableEdit() {
@@ -59,8 +59,8 @@ export default class TodoItem extends Vue {
   private disableEdit() {
     this.isEdit = false;
     this.$props.updateHandle({
-      id: this.$props.todo.id,
-      title: this.title,
+      _id: this.$props.todo._id,
+      task: this.task,
       completed: this.isDone
     });
   }
@@ -68,8 +68,8 @@ export default class TodoItem extends Vue {
   private toggleCheck() {
     this.isDone = !this.isDone;
     this.$props.updateHandle({
-      id: this.$props.todo.id,
-      title: this.title,
+      _id: this.$props.todo._id,
+      task: this.task,
       completed: this.isDone
     });
   }
