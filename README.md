@@ -1,4 +1,4 @@
-# Vue Todo
+# ![Vue logo](./src/assets/logo.png)ue Todo
 
 The basic Todo Application using vue, which i am trying to practice and learn, will be expanded more features such as AI, cool UI/UX.
 
@@ -8,15 +8,20 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-- node > 9
+1. **Node version > 9**
+
+2. **todos server** ([the repository link](https://github.com/miladvafaeifard/todos-server))
+
+    * Clone the server: `git clone https://github.com/miladvafaeifard/todos-server`
+    * install dependencies: `npm install`
+    * start the server: `npm start`
 
 ### Installing
 1. Clone the application 
 ```
-git clonehttps://github.com/miladvafaeifard/vue-todo.git 
+git clone https://github.com/miladvafaeifard/vue-todo.git
 ```
-
-2. install dependecies 
+2. install dependencies 
 ```
 cd vue-todo
 npm install
