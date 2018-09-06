@@ -58,15 +58,15 @@ export default class TodoItem extends Vue {
 
   private disableEdit() {
     this.isEdit = false;
-    this.$props.updateHandle({
-      _id: this.$props.todo._id,
-      task: this.task,
-      completed: this.isDone
-    });
+    this.updateModifiedTask();
   }
 
   private toggleCheck() {
     this.isDone = !this.isDone;
+    this.updateModifiedTask();
+  }
+
+  private updateModifiedTask(){
     this.$props.updateHandle({
       _id: this.$props.todo._id,
       task: this.task,
