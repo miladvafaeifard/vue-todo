@@ -2,6 +2,8 @@
 
 The basic Todo Application using vue, which i am trying to practice and learn, will be expanded more features such as AI, cool UI/UX.
 
+Demo: https://miladvafaeifard.github.io/vue-todo/#/Todo
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -30,7 +32,7 @@ npm install
 ```
 npm run serve
 ```
-4. Navigate to the application in your browser http://localhost:8080/
+4. Navigate to the application in your browser http://localhost:9000/, If you would like to change the port, you can set it before the npm script: `set PORT=xxxx&& npm run serve`
 
 ## Built With
 
@@ -43,10 +45,6 @@ npm run serve
 3. Commit your changes: `git commit -am 'Add some message'`
 4. Push to the branch: `git push origin new-feature`
 5. Submit a pull request :D
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
