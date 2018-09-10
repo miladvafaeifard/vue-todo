@@ -6,17 +6,17 @@
                 <input type="text"
                        class="form-control"
                        :value="field"
-                       @keyup.enter="(e) => executeAdd(e.target.value)"
+                       @keyup.enter="(e) => addHandle(e.target.value)"
                        @keyup="(e) => {
                             if (e.keyCode !== 13){
-                               executeFilter(e.target.value);
+                               filterHandle(e.target.value);
                             }
                        }"
                        placeholder="write something ... or search ...">
                 <div class="input-group-append">
                     <button type="button"
                             class="btn"
-                            @click="executeAdd(field)">
+                            @click="addHandle(field)">
                         Add
                     </button>
                 </div>
@@ -25,8 +25,8 @@
         <TodoItem v-for="(todo) in todos"
                   :key="todo._id"
                   :todo="todo"
-                  :deleteHandle="executeDelete"
-                  :updateHandle="executeUpdate"/>
+                  :deleteHandle="deleteHandle"
+                  :updateHandle="updateHandle"/>
     </div>
 </template>
 
@@ -60,7 +60,7 @@ export default class Todo extends Vue {
     this.$store.dispatch('LoadTodos');
   }
 
-  executeFilter(value: string) {
+  filterHandle(value: string) {
     this.$store.state.field = value;
     clearTimeout(this.timer);
     this.timer = window.setTimeout(() => {
@@ -68,16 +68,16 @@ export default class Todo extends Vue {
     }, 500);
   }
 
-  executeAdd(value: string) {
+  addHandle(value: string) {
     this.$store.state.field = value;
     this.Add();
   }
 
-  executeDelete(_id: string) {
+  deleteHandle(_id: string) {
     this.Delete({ _id });
   }
 
-  executeUpdate(todo: ITodo) {
+  updateHandle(todo: ITodo) {
     this.Update({ todo });
   }
 

@@ -4,6 +4,7 @@
   "homepage": "https://miladvafaeifard.github.io/vue-todo/",
   "private": true,
   "scripts": {
+    "start": "npm run serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
