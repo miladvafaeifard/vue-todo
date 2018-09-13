@@ -5,11 +5,11 @@ import ITodo from '@/model/todo.interface';
 const ALLOWED_LETTERS_NUMBER = 4;
 
 const mutations = {
-  Add(state: ITodoState) {
-    if (state.field) {
+  Add(state: ITodoState, data: {id: string, field: string}) {
+    if (data.field) {
       state.todos.push({
-        _id: uniqid(),
-        task: state.field,
+        _id: data.id,
+        task: data.field,
         completed: false
       });
 

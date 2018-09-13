@@ -66,7 +66,7 @@ export default class TodoItem extends Vue {
     this.updateModifiedTask();
   }
 
-  private updateModifiedTask(){
+  private updateModifiedTask() {
     this.$props.updateHandle({
       _id: this.$props.todo._id,
       task: this.task,

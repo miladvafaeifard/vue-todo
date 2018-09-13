@@ -46,7 +46,7 @@ import TodoItem from '@/components/TodoItem';
 export default class Todo extends Vue {
   private timer: number = 0;
 
-  @Action('Add') Add!: () => void;
+  @Action('Add') Add!: ({ field }: { field: string }) => void;
   @Action('Filter') Filter!: () => void;
   @Action('Delete') Delete!: ({ _id }: { _id: string }) => void;
   @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
@@ -70,7 +70,9 @@ export default class Todo extends Vue {
 
   addHandle(value: string) {
     this.$store.state.field = value;
-    this.Add();
+    if(value){
+      this.Add({field: value});
+    }
   }
 
   deleteHandle(_id: string) {
