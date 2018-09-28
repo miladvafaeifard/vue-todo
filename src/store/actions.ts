@@ -12,7 +12,7 @@ export type Action =
   | 'SetField';
 
 interface IdString {
-  id: number;
+  id: string;
 }
 
 type CommitAnnotation = (action: Action, data?: any) => void;
@@ -29,11 +29,13 @@ interface ResponseMessege {
 const actions = {
   Add({ commit }: Commit, data: { field: string }) {
     const newTask = {
-      id: uniqid(),
+      _id: uniqid(),
       field: data.field
     };
 
-    HttpService.post<ResponseMessege>(`todos?id=${newTask.id}&text=${newTask.field}`)
+    HttpService.post<ResponseMessege>(
+      `todos?id=${newTask._id}&text=${newTask.field}`
+    )
       .then(res => res.data)
       .then(res => {
         if (!res.messege) {
@@ -45,7 +47,20 @@ const actions = {
     commit('Delete', data);
   },
   Update({ commit }: Commit, data: ITodo) {
-    commit('Update', data);
+    const newTask = {
+      ...data
+    };
+    HttpService.put<ResponseMessege>(
+      `todos?id=${newTask._id}&text=${newTask.task}&completed=${
+        newTask.completed
+      }`
+    )
+      .then(res => res.data)
+      .then(res => {
+        if (!res.messege) {
+          commit('Update', data);
+        }
+      });
   },
   Filter({ commit }: Commit) {
     commit('Filter');
@@ -53,8 +68,10 @@ const actions = {
   LoadTodos({ commit }: Commit) {
     HttpService.get('todos')
       .then(res => res.data)
-      .then(todos => {
-        commit('SetTodos', { todos });
+      .then(res => {
+        if (!res.message) {
+          commit('SetTodos', { todos: res.todos });
+        }
       });
   }
 };

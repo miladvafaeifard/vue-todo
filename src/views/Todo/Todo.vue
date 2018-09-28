@@ -49,7 +49,7 @@ export default class Todo extends Vue {
   @Action('Add') Add!: ({ field }: { field: string }) => void;
   @Action('Filter') Filter!: () => void;
   @Action('Delete') Delete!: ({ _id }: { _id: string }) => void;
-  @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
+  @Action('Update') Update!: (todo: ITodo) => void;
 
   @Getter('filteredTodos') filteredTodos!: Array<ITodo>;
   @Getter('field') field!: string;
@@ -80,7 +80,7 @@ export default class Todo extends Vue {
   }
 
   updateHandle(todo: ITodo) {
-    this.Update({ todo });
+    this.Update(todo);
   }
 
   get todos() {

@@ -48,7 +48,7 @@ export default class TodoItem extends Vue {
   isDone: boolean = false;
 
   mounted() {
-    this.isDone = this.$props.todo.completed;
+    this.isDone = !!this.$props.todo.completed;
     this.task = this.$props.todo.task;
   }
 
@@ -70,7 +70,7 @@ export default class TodoItem extends Vue {
     this.$props.updateHandle({
       _id: this.$props.todo._id,
       task: this.task,
-      completed: this.isDone
+      completed: this.isDone? 1 : 0
     });
   }
 }
