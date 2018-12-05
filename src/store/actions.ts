@@ -54,7 +54,6 @@ const actions = {
         commit('Delete', data);
       }
     });
-    commit('Delete', data);
   },
   Update({ commit }: Commit, data: ITodo) {
     const newTask = {
