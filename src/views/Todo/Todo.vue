@@ -6,22 +6,27 @@
                 <input type="text"
                        class="form-control"
                        :value="field"
-                       @keyup.enter="executeAdd"
-                       @keyup="executeFilter"
-                       placeholder="What your mind is saying ...">
+                       @keyup.enter="(e) => addHandle(e.target.value)"
+                       @keyup="(e) => {
+                            if (e.keyCode !== 13){
+                               filterHandle(e.target.value);
+                            }
+                       }"
+                       placeholder="write something ... or search ...">
                 <div class="input-group-append">
                     <button type="button"
                             class="btn"
-                            @click="executeAdd(field)">Add
+                            @click="addHandle(field)">
+                        Add
                     </button>
                 </div>
             </div>
         </div>
         <TodoItem v-for="(todo) in todos"
-                  :key="todo.id"
+                  :key="todo._id"
                   :todo="todo"
-                  :deleteHandle="executeDelete"
-                  :updateHandle="executeUpdate"/>
+                  :deleteHandle="deleteHandle"
+                  :updateHandle="updateHandle"/>
     </div>
 </template>
 
@@ -41,10 +46,10 @@ import TodoItem from '@/components/TodoItem';
 export default class Todo extends Vue {
   private timer: number = 0;
 
-  @Action('Add') Add!: () => void;
+  @Action('Add') Add!: ({ field }: { field: string }) => void;
   @Action('Filter') Filter!: () => void;
-  @Action('Delete') Delete!: ({ id }: { id: number }) => void;
-  @Action('Update') Update!: ({ todo }: { todo: ITodo }) => void;
+  @Action('Delete') Delete!: ({ _id }: { _id: string }) => void;
+  @Action('Update') Update!: (todo: ITodo) => void;
 
   @Getter('filteredTodos') filteredTodos!: Array<ITodo>;
   @Getter('field') field!: string;
@@ -55,28 +60,27 @@ export default class Todo extends Vue {
     this.$store.dispatch('LoadTodos');
   }
 
-  executeFilter(e: any) {
-    this.$store.state.field = e.target.value;
+  filterHandle(value: string) {
+    this.$store.state.field = value;
     clearTimeout(this.timer);
-    if (this.field.length > 3) {
-      this.timer = window.setTimeout(() => {
-        this.Filter();
-      }, 500);
-    } else if (this.field.length === 0) {
+    this.timer = window.setTimeout(() => {
       this.Filter();
+    }, 500);
+  }
+
+  addHandle(value: string) {
+    this.$store.state.field = value;
+    if(value){
+      this.Add({field: value});
     }
   }
 
-  executeAdd() {
-    this.Add();
+  deleteHandle(_id: string) {
+    this.Delete({ _id });
   }
 
-  executeDelete(id: number) {
-    this.Delete({ id });
-  }
-
-  executeUpdate(todo: ITodo) {
-    this.Update({ todo });
+  updateHandle(todo: ITodo) {
+    this.Update(todo);
   }
 
   get todos() {

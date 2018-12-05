@@ -1,5 +1,6 @@
 export default interface ITodo {
-    id: number | string;
-    title: string;
+    id?: number | string;
+    _id: string;
+    task: string;
     completed?: boolean;
 }

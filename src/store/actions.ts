@@ -1,5 +1,6 @@
 import { HttpService } from '@/core/services/http-service';
 import ITodo from '@/model/todo.interface';
+import uniqid from 'uniqid';
 
 export type Action =
   | 'Add'
@@ -11,21 +12,65 @@ export type Action =
   | 'SetField';
 
 interface IdString {
-  id: number;
+  id: string;
 }
 
 type CommitAnnotation = (action: Action, data?: any) => void;
 type Commit = { commit: CommitAnnotation };
 
+interface ResponseMessege {
+  messege: string;
+  task: {
+    id: string;
+    text: string;
+  };
+}
+
 const actions = {
-  Add({ commit }: Commit) {
-    commit('Add');
+  Add({ commit }: Commit, data: { field: string }) {
+    const newTask = {
+      _id: uniqid(),
+      field: data.field
+    };
+
+    HttpService.post<ResponseMessege>(
+      `todos?id=${newTask._id}&text=${newTask.field}`
+    )
+      .then(res => res.data)
+      .then(res => {
+        if (!res.messege) {
+          commit('Add', { id: res.task.id, field: res.task.text });
+        }
+      });
   },
-  Delete({ commit }: Commit, data: IdString) {
+  Delete({ commit }: Commit, data: any) {
+    HttpService.delete(`todos/${data._id}`)
+    .then(res => {
+      console.log('res: ', res.data);
+      return res;
+    })
+    .then(res => {
+      if (!res.messege) {
+        commit('Delete', data);
+      }
+    });
     commit('Delete', data);
   },
   Update({ commit }: Commit, data: ITodo) {
-    commit('Update', data);
+    const newTask = {
+      ...data
+    };
+    HttpService.put<ResponseMessege>(
+      `todos?id=${newTask._id}&text=${newTask.task}&completed=${
+        newTask.completed
+      }`
+    )
+      .then(res => res.data)
+      .then(res => {
+        if (!res.messege) {
+          commit('Update', data);
+        }
+      });
   },
   Filter({ commit }: Commit) {
     commit('Filter');
@@ -33,8 +78,10 @@ const actions = {
   LoadTodos({ commit }: Commit) {
     HttpService.get('todos')
       .then(res => res.data)
-      .then(todos => {
-        commit('SetTodos', { todos });
+      .then(res => {
+        if (!res.message) {
+          commit('SetTodos', { todos: res.todos });
+        }
       });
   }
 };
