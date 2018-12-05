@@ -43,7 +43,17 @@ const actions = {
         }
       });
   },
-  Delete({ commit }: Commit, data: IdString) {
+  Delete({ commit }: Commit, data: any) {
+    HttpService.delete(`todos/${data._id}`)
+    .then(res => {
+      console.log('res: ', res.data);
+      return res;
+    })
+    .then(res => {
+      if (!res.messege) {
+        commit('Delete', data);
+      }
+    });
     commit('Delete', data);
   },
   Update({ commit }: Commit, data: ITodo) {
